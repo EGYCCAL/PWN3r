@@ -11,7 +11,19 @@ ids =  {}
 data =[]
 PWN3rFile = "../data/PWN3r.csv"
 def printLogo():
-    try:
+    logo = """
+ ___    _       _  _   _    ___       
+(  _`\ ( )  _  ( )( ) ( ) /'_  )      
+| |_) )| | ( ) | || `\| |(_)_) | _ __ 
+| ,__/'| | | | | || , ` | _(_ < ( '__)
+| |    | (_/ \_) || |`\ |( )_) || |   
+(_)    `\___x___/'(_) (_)`\____)(_)   
+    """
+    print(colored(logo, "green"))
+    print("By EGYCCAL")
+      
+  
+    '''  try:
         import pyfiglet
     except:         
         subprocess.run(["pip3", "install" , "pyfiglet"])
@@ -22,7 +34,9 @@ def printLogo():
 
     result = pyfiglet.figlet_format(text, font=font)
     colored_result = colored(result, "green")
+
     print(colored_result )
+    '''
     return  
 
 
@@ -163,7 +177,26 @@ def findOption():
 
     return 
 #the input is th list of found bin in format like {"id":"{"id":"1","name":"cat", "cmd":"cat '$file'", "type": "File Read"}"} and the id you want to execute
+def findOption():
+    cmds = suidbitSearch()
+   
+    if cmds != None:
+        print ("The binaries with 'suid'bit set is :")
+        #to sort the list of found bin by the id value 
+        cmds =  sorted(cmds, key=lambda cmd: int(cmd['id']))
+        for cmd in cmds:
+            print (cmd["id"] +":"+ cmd["name"] )
+            ids[cmd["id"]] = cmd
+    else:
+        print(f"There is no suitable binaries with 'suid' bit set ")
+        sys.exit()
+
+    return 
+
+
+#the input is th list of found bin in format like {"id":"{"id":"1","name":"cat", "cmd":"cat '$file'", "type": "File Read"}"} and the id you want to execute
 def executeOption(id = 0):
+    print("entre")
     id = input(f"Enter the command ID opress 'q' to exit.\n")
     if id == 'q':
         sys.exit()
@@ -171,24 +204,34 @@ def executeOption(id = 0):
         id = input(f"You have entered an invalid Value, please a valid Value or press 'q'.\n")
         if id == 'q':
             sys.exit()
-    
+
     if ids[id]["type"] ==  "File Read":
+        print("file read")
         filename = input("Enter the file name that you want to read\n")
+        if ids[id]["notes"] != '':
+            print(ids[id]["notes"]) 
         cmd = ids[id]["cmd"]
         cmd = cmd.replace("'$FILE'",filename)
         result = subprocess.run(cmd ,shell= True)
- 
-    elif ids[id]["type"] == "Gain Root Access":
-        cmd = ids[id]["cmd"]
-        #print(cmd)
-        result = subprocess.run(cmd, shell=True)
         if result.returncode == 0 :
             print(result.stdout)
         else:
-            print (result.stderr)
+            print(result.stderr)
+    elif ids[id]["type"] == "Gain Root Access":
+        if ids[id]["name"] in ["timeout","mv", "perl","python", "ruby","gcc", "as","wget"]:
+            print(ids[id]["notes"])
+        else:
+            cmd = ids[id]["cmd"]
+            #print(cmd)
+            result = subprocess.run(cmd, shell=True)
+            if result.returncode == 0 :
+                print(result.stdout)
+            else:
+                print (result.stderr)
     else:
         pass
     return 
+
 
 
 def main():

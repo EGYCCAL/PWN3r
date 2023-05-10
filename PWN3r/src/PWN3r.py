@@ -1,5 +1,4 @@
   
-from termcolor import colored
 import subprocess
 import argparse
 import os
@@ -7,12 +6,87 @@ import csv
 import sys
 
 
+#############################################
+# ANSI escape codes for different colors    #
+RESET = "\033[0m"                           #
+BLACK = "\033[30m"                          #
+RED = "\033[31m"                            #
+GREEN = "\033[32m"                          #
+YELLOW = "\033[33m"                         #
+BLUE = "\033[34m"                           #
+MAGENTA = "\033[35m"                        #
+CYAN = "\033[36m"                           #
+WHITE = "\033[37m"                          #
+#erase from cursor until end of screen      #
+ERASETOEND = "\033[0J"                      #
+#erase from cursor to beginning of screen   #
+ERASETPBEGAIN = "\033[1J"                   #
+#erase from cursor to end of line           #
+ERASETOENDLINE = "\033[0K"                  #
+#erase start of line to the cursor          #
+ERASETOSTARTLINE = "\033[1K"                #
+#erase the entire line                      #
+ERASEENTIRELINE = "\033[2K"                 #
+#erase entire screen                        #
+ERASEENTIRESCREEN = "\033[2J"               #
+#moves cursor to line #, column #           #
+#\033[{line};{column}f	                    #
+#moves cursor to home position (0, 0)       #
+MOVETOHOME = "\033[H"                       #
+#request cursor position (reports ESC[#;#R) #
+REQUESTPOSTION = "\033[6n"                  #
+#save cursor position (SCO)                 #
+SAVE = "\033[s"                             #
+#restores the cursor to saved position (SCO)#
+RESTOR = "\033[u"                           #
+#############################################
+
 ids =  {}
 data =[]
 PWN3rFile = "../data/PWN3r.csv"
 def printLogo():
-    logo = """
-                                                     ..
+    logo = f"""{GREEN}
+                    :       :                    
+                    +       +                    
+                    %       %                    
+                    @       @                    
+                    @       @                    
+                    @       @                    
+                    @       @                    
+                  # @:     :@ *                  
+                  # @#     #@ #                  
+           =:     @ @@     @@ @     :=           
+            @    .@ @@     @@ @.    @            
+            #@  +@@ @@     @@ @@+  @#            
+            -@   %@@@@     @@@@#   @-            
+            =@    @@@@     @@@@    @=            
+            #@    %@@@.   .@@@%    @#            
+            +@@   :@@@@   @@@@:   @@=            
+           # @@@. %@@@@   @@@@# .@@@ #           
+           @ @@@@@@@@@.   .@@@@@@@@@ @           
+           @@ @@@@@@@@  @  @@@@@@@@ @@           
+           .@@%@@@@@@@  @  @@@@@@@#@@.           
+            @@@@@@@@@@+   +@@@@@@@@@@            
+            :@@@@@@@@@@   @@@@@@@@@@.            
+           @ @@@@#@@@@@@ @@@@@@#@@@@ @           
+           *@=@@@# @@@@@-@@@@@ #@@@=@*           
+            @@@@@#  @@@@@@@@@  #@@@@@            
+             @@@@#   @@@@@@@   #@@@@             
+              @@@@    @@@@@    @@@@              
+               *@@  * #@@@# *  @@*               
+                =@@*@@+@@@+@@*@@-                
+                 *@@ @@@@@@@ @@*                 
+                  @@=:@@@@@:=@@                  
+                   @ @@@@@@@ @                   
+                   # %@@@@@% #                   
+                     @@@@@@@                     
+                     @@@@@@@                     
+                     .@@@@@.                     
+                      @@@@@                      
+                      @@@@@                      
+                    .@@@@@@@.                    
+                      #@@@#                      
+                        %                                                                  ..
                                                    ^!^:^!.
  ___    _       _  _   _    ___       	          .B    .5::.
 (  _`\ ( )  _  ( )( ) ( ) /'_  )      	           B^       ?^ 
@@ -22,25 +96,10 @@ def printLogo():
 (_)    `\___x___/'(_) (_)`\____)(_)     ^7^^.    7?  
                                             :P.   7?				
                                              ^^^^.  
-    """
-    print(colored(logo, "green"))
+    {RESET}"""
+    print(logo)
     print("By EGYCCAL")
-      
-  
-    '''  try:
-        import pyfiglet
-    except:         
-        subprocess.run(["pip3", "install" , "pyfiglet"])
-
-    text = "PWN3r"
-
-    font = "puffy"
-
-    result = pyfiglet.figlet_format(text, font=font)
-    colored_result = colored(result, "green")
-
-    print(colored_result )
-    '''
+    print(SAVE)
     return  
 
 
@@ -57,35 +116,21 @@ def optionParsing():
 
 
 
-def function_1():  
-    print(colored("You chose option 1.", "yellow"))
+def Goodbye():   
+    print(f"{RED}Goodbye!{RESET}")
     return
 
-
-def function_2():   
-    print(colored("You chose option 2.", "green"))
-    return
-
-def function_3():   
-    print(colored("You chose option 3.", "cyan"))
-    return
-
-def function_4():   
-    print(colored("Goodbye!", "red"))
-    return
-
-def function_5():   
-    print(colored("Invalid choice. Please try again.", "red"))
+def Invalid_Choice():   
+    print(f"{RED}Invalid choice. Please try again.{RESET}")
     return
 
 def noOption():
     while True:
         # Print the menu options
-        print(colored("Menu:", "cyan"))
-        print(colored("1. List binaries with SUID bit set", "yellow"))
-        print(colored("2. execute the binary ", "green"))
-        print(colored("3. Quit", "red"))
-        #print(colored("4. Quit", "red"))
+        print(f"{CYAN}Menu:{RESET}")
+        print(f"{YELLOW}1. List binaries with SUID bit set{RESET}")
+        print(f"{GREEN}2. execute the binary{RESET}")
+        print(F"{RED}3. Quit{RESET}")
 
         # Get the user's choice
         choice = input("Enter an option: ")
@@ -99,10 +144,10 @@ def noOption():
             executeOption()
             break
         elif choice == '3':
-            function_4()
+            Goodbye()
             break
         else:
-            function_5()
+            Invalid_Choice()
     return 
 
 def suidbitSearch():
@@ -163,25 +208,10 @@ def openCsv():
     return sys.exit()
    
    
-        
 
-def findOption():
-    cmds = suidbitSearch()
-   
-    if cmds != None:
-        print ("The binaries with 'suid'bit set is :")
-        #to sort the list of found bin by the id value 
-        cmds =  sorted(cmds, key=lambda cmd: int(cmd['id']))
-        for cmd in cmds:
-            print (cmd["id"] +":"+ cmd["name"] )
-            ids[cmd["id"]] = cmd
-    else:
-        print(f"There is no suitable binaries with 'suid' bit set ")
-        sys.exit()
-
-    return 
 #the input is th list of found bin in format like {"id":"{"id":"1","name":"cat", "cmd":"cat '$file'", "type": "File Read"}"} and the id you want to execute
 def findOption():
+    print(RESTOR + ERASETOEND)    
     cmds = suidbitSearch()
    
     if cmds != None:
@@ -200,6 +230,7 @@ def findOption():
 
 #the input is th list of found bin in format like {"id":"{"id":"1","name":"cat", "cmd":"cat '$file'", "type": "File Read"}"} and the id you want to execute
 def executeOption(id = 0):
+    print(RESTOR + ERASETOEND)
     print("entre")
     id = input(f"Enter the command ID opress 'q' to exit.\n")
     if id == 'q':
@@ -239,7 +270,6 @@ def executeOption(id = 0):
 
 
 def main():
-    os.system('cls' if os.name == 'nt' else 'clear')
     printLogo()
     find_value,exec_value = optionParsing()
     if find_value == False and exec_value == False:

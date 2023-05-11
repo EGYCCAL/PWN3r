@@ -211,7 +211,7 @@ def findOption():
         #to sort the list of found bin by the id value 
         cmds =  sorted(cmds, key=lambda cmd: int(cmd['id']))
         for cmd in cmds:
-            print (cmd["id"] +":"+ cmd["name"] )
+            print (cmd["id"] +":"+ cmd["name"] + " \n\tusage : " + cmd["type"] )
             ids[cmd["id"]] = cmd
     else:
         print(f"There is no suitable binaries with 'suid' bit set ")
@@ -229,12 +229,19 @@ def executeOption(id = 0):
         id = input(f"You have entered an invalid Value, please a valid Value or press 'q'.\n")
         if id == 'q':
             sys.exit()
+    
+    if ids[id]["comments"] != '':
+        print( "This command will:  "+ ids[id]["comments"]) 
+    if ids[id]["notes"] != '':
+        print(ids[id]["notes"]) 
+
 
     if ids[id]["type"] == "File Read":
-        print("file read")
+        #print("file read")
         filename = input("Enter the file name that you want to read\n")
-        if ids[id]["notes"] != '':
-            print(ids[id]["notes"]) 
+        while filename == "":
+            filename = input("No data was entered please try again\n") 
+        
         cmd = ids[id]["cmd"]
         cmd = cmd.replace("'$FILE'",filename)
         result = subprocess.run(cmd ,shell= True)
@@ -258,7 +265,7 @@ def executeOption(id = 0):
             else:
                 print (result.stderr)
     else:
-        print ("pass")
+        pass
     return 
 
 

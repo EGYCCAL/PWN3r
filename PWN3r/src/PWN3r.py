@@ -149,10 +149,24 @@ def suidbitSearch():
         data = openCsv()
         found_bin = [cmd for cmd in output_dict.values()]
         cmds = []
+        #####################################
+ 
+        #    print(bin)
+        ######################################        
         for bin in found_bin:
             for row in data:
                 #use strip to remove spaces in the start and end of the text
                 if row["name"].strip()== bin:
+                    cmds.append(row)
+                elif row["name"].strip() == "ruby" and "ruby" in bin:
+                    cmds.append(row)   
+                elif row["name"].strip() =="python" and "python" in bin :
+                    cmds.append(row)
+                elif row["name"].strip() =="gcc" and "gcc"in bin : 
+                    cmds.append(row)
+                elif row["name"].strip() =="as" and "as" in bin :
+                    cmds.append(row)
+                elif row["name"].strip() =="perl" and "perl" in bin :
                     cmds.append(row)
         if len(cmds) == 0:
             cmds= None

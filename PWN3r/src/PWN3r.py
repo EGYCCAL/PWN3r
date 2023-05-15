@@ -4,6 +4,8 @@ import argparse
 import os
 import csv
 import sys
+import time 
+
 
 
 #############################################
@@ -41,7 +43,7 @@ SAVE = "\033[s"                             #
 #restores the cursor to saved position (SCO)#
 RESTOR = "\033[u"                           #
 #############################################
-
+delayMs= 0.03
 ids =  {}
 data =[]
 PWN3rFile = "../data/PWN3r.csv"
@@ -62,6 +64,16 @@ def printLogo():
     print(SAVE)
     return  
 
+def Myprint(str,end=1):
+    for char in str:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delayMs)
+    if end == 1:
+        print()
+    else :
+        pass
+    return
 
 def optionParsing():
     parser = argparse.ArgumentParser()
@@ -91,28 +103,29 @@ def wgetFunction():
 
 def timeoutFunction():
     
-    print ("please run this command:\ntimeout 10d /bin/sh -p")
+    Myprint ("please run this command:\ntimeout 10d /bin/sh -p")
     return 
 
 
 def Goodbye():   
-    print(f"{RED}Goodbye!{RESET}")
+    Myprint(f"{RED}Goodbye!{RESET}")
     return
 
 def Invalid_Choice():   
-    print(f"{RED}Invalid choice. Please try again.{RESET}")
+    Myprint(f"{RED}Invalid choice. Please try again.{RESET}")
     return
 
 def noOption():
     while True:
         # Print the menu options
-        print(f"{CYAN}Menu:{RESET}")
-        print(f"{YELLOW}1. List binaries with SUID bit set{RESET}")
-        print(f"{GREEN}2. execute the binary{RESET}")
-        print(F"{RED}3. Quit{RESET}")
+        Myprint(f"{CYAN}Menu:{RESET}")
+        Myprint(f"{YELLOW}1. List binaries with SUID bit set{RESET}")
+        Myprint(f"{GREEN}2. execute the binary{RESET}")
+        Myprint(F"{RED}3. Quit{RESET}")
 
         # Get the user's choice
-        choice = input("Enter an option: ")
+        Myprint("Enter an option: ", " ")
+        choice = input()
 
         # Handle the user's choice
         if choice == "1":
@@ -131,7 +144,7 @@ def noOption():
 
 def suidbitSearch():
     #printLogo()
-    print (f"searching for binaries with 'suid' bit set...")
+    Myprint (f"searching for binaries with 'suid' bit set...")
     
     cmd = "ls /bin/ -al | awk '{if(substr($1, 4, 1) == \"s\")print $9}'"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
@@ -151,7 +164,7 @@ def suidbitSearch():
         cmds = []
         #####################################
  
-        #    print(bin)
+        #    Myprint(bin)
         ######################################        
         for bin in found_bin:
             for row in data:
@@ -170,7 +183,6 @@ def suidbitSearch():
                     cmds.append(row)
         if len(cmds) == 0:
             cmds= None
-                    
         return cmds
     else:
         print(result.stderr)
@@ -191,12 +203,12 @@ def openCsv():
                 data = [row for row in reader]
                 return data
         elif "No such file or directory" in result.stdout:
-            print("Sorry :( I can't find the CSV command file.")
+            Myprint("Sorry :( I can't find the CSV command file.")
             sys.exit()
         else:
-            print("The CSV command file is not in the correct format :(")
+            Myprint("The CSV command file is not in the correct format :(")
     else:
-        print("There is an unexpected error")
+        Myprint("There is an unexpected error")
         print(result.stderr) 
     return sys.exit()
    
@@ -207,14 +219,14 @@ def findOption():
     cmds = suidbitSearch()
    
     if cmds != None:
-        print ("The binaries with 'suid'bit set is :")
+        Myprint ("The binaries with 'suid'bit set is :")
         #to sort the list of found bin by the id value 
         cmds =  sorted(cmds, key=lambda cmd: int(cmd['id']))
         for cmd in cmds:
-            print (cmd["id"] +":"+ cmd["name"] + " \n\tusage : " + cmd["type"] )
+            Myprint (cmd["id"] +":"+ cmd["name"] + " \n\tusage : " + cmd["type"] )
             ids[cmd["id"]] = cmd
     else:
-        print(f"There is no suitable binaries with 'suid' bit set ")
+        Myprint(f"There is no suitable binaries with 'suid' bit set ")
         sys.exit()
 
     return 
@@ -226,21 +238,24 @@ def executeOption(id = 0):
     if id == 'q':
         sys.exit()
     while id not in ids.keys() :
-        id = input(f"You have entered an invalid Value, please a valid Value or press 'q'.\n")
+        Myprint(f"You have entered an invalid Value, please a valid Value or press 'q'.")
+        id = input()
         if id == 'q':
             sys.exit()
     
     if ids[id]["comments"] != '':
-        print( "This command will:  "+ ids[id]["comments"]) 
+        Myprint( "This command will:  "+ ids[id]["comments"]) 
     if ids[id]["notes"] != '':
-        print(ids[id]["notes"]) 
+        Myprint(ids[id]["notes"]) 
 
 
     if ids[id]["type"] == "File Read":
-        #print("file read")
-        filename = input("Enter the file name that you want to read\n")
+        #Myprint("file read")
+        Myprint("Enter the file name that you want to read")
+        filename = input()
         while filename == "":
-            filename = input("No data was entered please try again\n") 
+            Myprint("No data was entered please try again")
+            filename = input() 
         
         cmd = ids[id]["cmd"]
         cmd = cmd.replace("'$FILE'",filename)
@@ -255,10 +270,10 @@ def executeOption(id = 0):
         elif ids[id]["name"] == "timeout":
             timeoutFunction()
         elif ids[id]["name"] == "mv":
-            print ("move command")
+            Myprint ("move command")
         else:
             cmd = ids[id]["cmd"]
-            print(cmd)
+            Myprint(cmd)
             result = subprocess.run(cmd, shell=True)
             if result.returncode == 0 :
                 print(result.stdout)

@@ -7,8 +7,8 @@ Supervised by:
 Dr. Emad Eldin Helmy
 
 Devolped by :
-Mohamed El Sobki
-Umar sayed
-Mohamed Atef
-Zyad Abd-Allah
-Yasmeen magdy 
+Mohamed El Sobki, 
+Umar sayed, 
+Mohamed Atef, 
+Zyad Abd-Allah, 
+Yasmeen magdy.

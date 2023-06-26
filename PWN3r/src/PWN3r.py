@@ -56,7 +56,7 @@ def printLogo():
 | ,__/'| | | | | || , ` | _(_ < ( '__)	 ^77@@@@@@@P~  	
 | |    | (_/ \_) || |`\ |( )_) || |    J@@@@@@@@&P~
 (_)    `\___x___/'(_) (_)`\____)(_)    !#@@@@@@@5
-{RESET}{WHITEBACK}{BLACK}EGY{RED}CCAL{RESET} Team{GREEN}                           .^7&@@@@G
+{RESET}{WHITEBACK}{BLACK}EGY{RED}CCAL{RESET} Team {GREEN}                           .^7&@@@@G
                                            ^^^^.  
 
     {RESET}"""

@@ -19,7 +19,7 @@ BLUE = "\033[34m"                           #
 MAGENTA = "\033[35m"                        #
 CYAN = "\033[36m"                           #
 WHITE = "\033[37m" 
-WHITEBACK = "\033[47m"                         #
+WHITEBACK = "\033[47m"                      #
 #erase from cursor until end of screen      #
 ERASETOEND = "\033[0J"                      #
 #erase from cursor to beginning of screen   #
@@ -43,7 +43,7 @@ SAVE = "\033[s"                             #
 #restores the cursor to saved position (SCO)#
 RESTOR = "\033[u"                           #
 #############################################
-delayMs= 0.03
+delayMs= 0.025
 ids =  {}
 data =[]
 PWN3rFile = "../data/PWN3r.csv"
@@ -137,6 +137,7 @@ def noOption():
             break
         elif choice == '3':
             Goodbye()
+            sys.exit()
             break
         else:
             Invalid_Choice()
@@ -286,15 +287,16 @@ def executeOption(id = 0):
 
 
 def main():
-    printLogo()
-    find_value,exec_value = optionParsing()
-    if find_value == False and exec_value == False:
-        noOption()
-    elif find_value == True:
-        findOption()
-    elif exec_value == True:
-        findOption()
-        executeOption()
+    while True:
+        printLogo()
+        find_value,exec_value = optionParsing()
+        if find_value == False and exec_value == False:
+            noOption()
+        elif find_value == True:
+            findOption()
+        elif exec_value == True:
+            findOption()
+            executeOption()
     return 
 
 if __name__ == "__main__":
